@@ -35,14 +35,19 @@ def get_canu_readtype_flag(readtype):
         raise ValueError()
 
 
+## make edits here, Mike
 def combine(reads, direction, outdir):
     for i, inread in enumerate(reads):
         outread = f"{outdir}/{direction}_reads{i}.fq"
+        
+        # CHANGE TO DO: if not gzipped, gzip (without -c), then just zcat all the gzipped files below
         if inread.endswith(".gz"):
             subprocess.run(f"gunzip -c {inread} > {outread}", shell=True)
         else:
+            # CHANGE TO DO: mv file instead of copy
             shutil.copyfile(inread, outread)
     commands = (
+        # CHANGE TO DO: just zcat, then remove starting reads (which are already copies from somewhere else)
         f"cat {outdir}/{direction}_reads*.fq > {outdir}/{direction}_combined-reads.fq;"
         f"gzip {outdir}/{direction}_combined-reads.fq"
     )
